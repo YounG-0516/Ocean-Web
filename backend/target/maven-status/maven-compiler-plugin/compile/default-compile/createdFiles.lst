@@ -1,0 +1,5 @@
+com\example\waterquality\repository\WaterQualityRepository.class
+com\example\waterquality\WaterQualityApplication.class
+com\example\waterquality\model\WaterQualityData.class
+com\example\waterquality\service\WaterQualityService.class
+com\example\waterquality\controller\WaterQualityController.class
