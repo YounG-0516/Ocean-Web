@@ -78,28 +78,4 @@ public class WaterQualityService {
         dataList.clear();
         loadDataFromFile();
     }
-    
-    public void importCSV(MultipartFile file) throws IOException, CsvValidationException {
-        try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
-            String[] line;
-            // 跳过标题行
-            reader.readNext();
-            
-            while ((line = reader.readNext()) != null) {
-                WaterQualityData data = new WaterQualityData();
-                data.setDate(LocalDateTime.parse(line[0], DateTimeFormatter.ISO_DATE_TIME));
-                data.setTemperature(Double.parseDouble(line[1]));
-                data.setSalinity(Double.parseDouble(line[2]));
-                data.setDissolvedOxygen(Double.parseDouble(line[3]));
-                data.setPH(Double.parseDouble(line[4]));
-                data.setTurbidity(Double.parseDouble(line[5]));
-                data.setChlorophyll(Double.parseDouble(line[6]));
-                data.setNitrate(Double.parseDouble(line[7]));
-                data.setPhosphate(Double.parseDouble(line[8]));
-                data.setSilicate(Double.parseDouble(line[9]));
-                
-                repository.save(data);
-            }
-        }
-    }
 } 
