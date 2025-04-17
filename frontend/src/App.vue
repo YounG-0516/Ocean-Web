@@ -170,7 +170,7 @@
               </div>
             </div>
             <div class="charts-container">
-              <div class="chart-wrapper" v-for="(chart, index) in 7" :key="index">
+              <div class="chart-wrapper" v-for="(chart, index) in 8" :key="index">
                 <canvas :ref="'chart' + index"></canvas>
               </div>
             </div>
@@ -248,13 +248,14 @@ export default {
       sortKey: 'date',
       sortOrder: 'desc', // 'asc' 或 'desc'
       dongshanData: {
-        HUFL: 0,
-        HULL: 0,
-        MUFL: 0,
-        MULL: 0,
-        LUFL: 0,
-        LULL: 0,
-        OT: 0
+        chlorophyll: 0,
+        waterTemperature: 0,
+        dissolvedOxygen: 0,
+        pH: 0,
+        salinity: 0,
+        pressure: 0,
+        airTemperature: 0,
+        relativeHumidity: 0
       },
       charts: [],
       chart: null
@@ -632,19 +633,22 @@ export default {
       try {
         const response = await fetch('http://localhost:8080/api/water-quality');
         const data = await response.json();
+        console.log('Received data:', data);  // 添加调试日志
         if (data && data.length > 0) {
           // 更新最新数据
           const latestData = data[data.length - 1];
+          console.log('Latest data:', latestData);  // 添加调试日志
           this.dongshanData = {
-            chlorophyll: latestData.hufl?.toFixed(2) || 0,
-            water_temperature: latestData.hull?.toFixed(2) || 0,
-            DO: latestData.mufl?.toFixed(2) || 0,
-            pH: latestData.mull?.toFixed(2) || 0,
-            Salinity: latestData.lufl?.toFixed(2) || 0,
-            pressure: latestData.lull?.toFixed(2) || 0,
-            air_temperature: latestData.ot?.toFixed(2) || 0,
-            relative_humidity: latestData.ot?.toFixed(2) || 0
+            chlorophyll: latestData.chlorophyll?.toFixed(2) || 0,
+            waterTemperature: latestData.waterTemperature?.toFixed(2) || 0,
+            dissolvedOxygen: latestData.dissolvedOxygen?.toFixed(2) || 0,
+            pH: latestData.ph?.toFixed(2) || 0,
+            salinity: latestData.salinity?.toFixed(2) || 0,
+            pressure: latestData.pressure?.toFixed(2) || 0,
+            airTemperature: latestData.airTemperature?.toFixed(2) || 0,
+            relativeHumidity: latestData.relativeHumidity?.toFixed(2) || 0
           };
+          console.log('Processed data:', this.dongshanData);  // 添加调试日志
           
           // 更新图表
           this.$nextTick(() => {
@@ -658,13 +662,14 @@ export default {
     
     getLabel(key) {
       const labels = {
-        HUFL: '叶绿素 a',
-        HULL: '相对湿度',
-        MUFL: '气压',
-        MULL: '电导率',
-        LUFL: '盐度',
-        LULL: 'pH',
-        OT: '溶解氧'
+        chlorophyll: '叶绿素 a',
+        waterTemperature: '水温',
+        dissolvedOxygen: '溶解氧',
+        pH: 'pH',
+        salinity: '盐度',
+        pressure: '气压',
+        airTemperature: '空气温度',
+        relativeHumidity: '相对湿度'
       };
       return labels[key] || key;
     },
@@ -679,10 +684,10 @@ export default {
       this.charts = [];
       
       // 定义要显示的指标
-      const metrics = ['hufl', 'hull', 'mufl', 'mull', 'lufl', 'lull', 'ot'];
+      const metrics = ['chlorophyll', 'waterTemperature', 'dissolvedOxygen', 'ph', 'salinity', 'pressure', 'airTemperature', 'relativeHumidity'];
       
       // 数据采样间隔（每10个点取一个）
-      const samplingInterval = 100;
+      const samplingInterval = 10;
       const sampledData = data.filter((_, index) => index % samplingInterval === 0);
       
       // 为每个指标创建图表
@@ -707,7 +712,7 @@ export default {
           data: {
             labels: timestamps,
             datasets: [{
-              label: this.getLabel(metric.toUpperCase()),
+              label: this.getLabel(metric),
               data: values,
               borderColor: this.getChartColor(index),
               backgroundColor: 'transparent',
@@ -725,7 +730,7 @@ export default {
             plugins: {
               title: {
                 display: true,
-                text: this.getLabel(metric.toUpperCase()),
+                text: this.getLabel(metric),
                 font: {
                   size: 16,
                   weight: 'bold'

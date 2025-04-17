@@ -25,7 +25,7 @@ public class WaterQualityService {
     
     private final WaterQualityRepository repository;
     private List<WaterQualityData> dataList = new ArrayList<>();
-    private final String dataFilePath = "E:/Research/Undergraduate/GraduationProject_major/web/ocean/data/ETTh1.csv";
+    private final String dataFilePath = "E:/Research/Undergraduate/GraduationProject_major/web/ocean/data/all.csv";
     
     @Autowired
     public WaterQualityService(WaterQualityRepository repository) {
@@ -48,16 +48,19 @@ public class WaterQualityService {
                     
                     while ((line = reader.readNext()) != null) {
                         WaterQualityData data = new WaterQualityData();
-                        data.setDate(LocalDateTime.parse(line[0], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                        data.setHUFL(Double.parseDouble(line[1]));
-                        data.setHULL(Double.parseDouble(line[2]));
-                        data.setMUFL(Double.parseDouble(line[3]));
-                        data.setMULL(Double.parseDouble(line[4]));
-                        data.setLUFL(Double.parseDouble(line[5]));
-                        data.setLULL(Double.parseDouble(line[6]));
-                        data.setOT(Double.parseDouble(line[7]));
+                        data.setDate(LocalDateTime.parse(line[0] + " 00:00:00", DateTimeFormatter.ofPattern("yyyy/M/d HH:mm:ss")));
+                        data.setChlorophyll(Double.parseDouble(line[1]));
+                        data.setWaterTemperature(Double.parseDouble(line[2]));
+                        data.setDissolvedOxygen(Double.parseDouble(line[3]));
+                        data.setPH(Double.parseDouble(line[4]));
+                        data.setSalinity(Double.parseDouble(line[5]));
+                        data.setPressure(Double.parseDouble(line[6]));
+                        data.setAirTemperature(Double.parseDouble(line[7]));
+                        data.setRelativeHumidity(Double.parseDouble(line[8]));
                         
+                        System.out.println("Loaded data - pH: " + data.getPH());
                         dataList.add(data);
+                        repository.save(data);
                     }
                 }
             }

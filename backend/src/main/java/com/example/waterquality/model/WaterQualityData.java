@@ -1,14 +1,15 @@
 package com.example.waterquality.model;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "water_quality_data")
+@Getter
+@Setter
 public class WaterQualityData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,51 +18,27 @@ public class WaterQualityData {
     @Column(name = "date")
     private LocalDateTime date;
     
-    @Column(name = "hufl")
-    private Double HUFL;
+    @Column(name = "chlorophyll")
+    private Double chlorophyll;
     
-    @Column(name = "hull")
-    private Double HULL;
-    
-    @Column(name = "mufl")
-    private Double MUFL;
-    
-    @Column(name = "mull")
-    private Double MULL;
-    
-    @Column(name = "lufl")
-    private Double LUFL;
-    
-    @Column(name = "lull")
-    private Double LULL;
-    
-    @Column(name = "ot")
-    private Double OT;
-    
-    @Column(name = "temperature")
-    private Double temperature;
-    
-    @Column(name = "salinity")
-    private Double salinity;
+    @Column(name = "water_temperature")
+    private Double waterTemperature;
     
     @Column(name = "dissolved_oxygen")
     private Double dissolvedOxygen;
     
-    @Column(name = "ph")
+    @Column(name = "pH")
     private Double pH;
     
-    @Column(name = "turbidity")
-    private Double turbidity;
+    @Column(name = "salinity")
+    private Double salinity;
     
-    @Column(name = "chlorophyll")
-    private Double chlorophyll;
+    @Column(name = "pressure")
+    private Double pressure;
     
-    @Column(name = "nitrate")
-    private Double nitrate;
+    @Column(name = "air_temperature")
+    private Double airTemperature;
     
-    @Column(name = "phosphate")
-    private Double phosphate;
-    
-    @Column(name = "silicate")
-    private Double silicate;
+    @Column(name = "relative_humidity")
+    private Double relativeHumidity;
 } 
